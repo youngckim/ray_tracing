@@ -158,8 +158,8 @@ class Light {
 }
 
 class RenderPanel extends JPanel {
-    static final int WIDTH = 1920;
-    static final int HEIGHT = 1080;
+    static final int WIDTH = 800;
+    static final int HEIGHT = 600;
     static final int MAX_DEPTH = 5;
     static final double FOV = 90.0;
     
@@ -174,8 +174,8 @@ class RenderPanel extends JPanel {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         
-        // Setup scene with 112 spheres (2 large + 10 medium + 100 small)
-        spheres = new Sphere[112];
+        // Setup scene with 1012 spheres (2 large + 10 medium + 1000 small)
+        spheres = new Sphere[1012];
         
         // Original two large spheres
         spheres[0] = new Sphere(new Vec3(-1.0, 0.0, -3.0), 1.0, 
@@ -205,15 +205,15 @@ class RenderPanel extends JPanel {
             );
         }
 
-        // Add 100 small spheres (1/5 size) in multiple circular layers
-        double smallRadius = 0.2; // 1/5 size
-        int smallSphereCount = 100;
-        int layerCount = 4; // Number of circular layers
+        // Add 1000 small spheres in multiple circular layers
+        double smallRadius = 0.1; // Smaller radius to accommodate more spheres
+        int smallSphereCount = 1000;
+        int layerCount = 10; // More layers
         int spheresPerLayer = smallSphereCount / layerCount;
         
         for (int layer = 0; layer < layerCount; layer++) {
-            double layerRadius = 3.5 + layer * 0.8; // Increasing radius for each layer
-            double layerHeight = -0.5 + layer * 0.4; // Different height for each layer
+            double layerRadius = 3.5 + layer * 0.6; // Adjusted spacing between layers
+            double layerHeight = -0.8 + layer * 0.2; // Different height for each layer
             
             for (int i = 0; i < spheresPerLayer; i++) {
                 double angle = (2 * Math.PI * i) / spheresPerLayer + (layer * Math.PI / layerCount);
@@ -228,7 +228,7 @@ class RenderPanel extends JPanel {
                 double roughness = 0.1 + (0.3 * (Math.sin(angle) * 0.5 + 0.5));
                 
                 // Create color based on position
-                double hue = ((double)sphereIndex / smallSphereCount + layer * 0.25) % 1.0;
+                double hue = ((double)sphereIndex / smallSphereCount + layer * 0.1) % 1.0;
                 Vec3 color = hueToRGB(hue);
                 
                 spheres[sphereIndex] = new Sphere(
@@ -239,8 +239,8 @@ class RenderPanel extends JPanel {
             }
         }
 
-        // Move camera back to see all spheres
-        camera = new Vec3(0, 1, 3);
+        // Move camera back further to see all spheres
+        camera = new Vec3(0, 1.5, 4);
 
         plane = new Plane(new Vec3(0, -1, 0), new Vec3(0, 1, 0),
                          new Material(new Vec3(0.5, 0.5, 0.5), 0.0, 0.2));
@@ -303,7 +303,7 @@ class RenderPanel extends JPanel {
 
         // Animate small spheres with wave patterns
         for (int i = 12; i < spheres.length; i++) {
-            double individualTime = time + (2 * Math.PI * (i - 12)) / 100;
+            double individualTime = time + (2 * Math.PI * (i - 12)) / 1000;
             double baseX = spheres[i].center.x;
             double baseY = spheres[i].center.y;
             double baseZ = spheres[i].center.z;

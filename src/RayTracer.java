@@ -158,8 +158,8 @@ class Light {
 }
 
 class RenderPanel extends JPanel {
-    static final int WIDTH = 800;
-    static final int HEIGHT = 600;
+    static final int WIDTH = 1920;
+    static final int HEIGHT = 1080;
     static final int MAX_DEPTH = 5;
     static final double FOV = 90.0;
     
